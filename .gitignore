@@ -1,0 +1,12 @@
+# Ignore Tex compiler files
+*.aux
+*.log
+*.nav
+*.out
+*.toc
+*.snm
+*.bbl
+*.blg
+*.synctex.gz
+*.fls
+*.fdb_latexmk

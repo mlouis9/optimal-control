@@ -1,0 +1,135 @@
+% !TeX root = main.tex
+
+
+% Copyright 2014 by Emmanuel Boidot <eboidot3@gatech.edu>
+\documentclass[10pt,compress]{beamer}
+
+%%%% GT theme %%%%
+% add 'gold' option for golden frame titles
+% partToc (resp. sectionToc) creates table of contents at the beginning of each part (resp. section)
+\usetheme[sectionToc,partToc]{GT} 
+\input{include.tex}
+
+
+
+\title[Short title] % (optional, use only with long paper titles, appears in the lower right part of each frame)
+{Optimal Control for Nuclear Reactors}
+
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+\author[M. Louis]% (optional, appears in the lower left part of each frame)
+{Calculus of Variations Final Presentation\texorpdfstring{\\}{}Matthew Louis}
+
+\date{\today}
+
+
+\begin{document}
+
+{ % for the title frame, use the following options
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{images/logos/Georgia-Tech-Insignia-Watermark-1200x1100}}
+\setbeamertemplate{headline}{}
+\setlength{\headheight}{0in}
+\setbeamertemplate{footline}{}
+
+% ----------
+% Titlepage
+% ----------
+
+\begin{frame}
+\titlepage
+\end{frame}
+}
+\addtocounter{framenumber}{-1}
+
+{
+\setbeamertemplate{headline}{}
+\begin{frame}\frametitle{Outline}
+  \begin{columns}
+  	\begin{column}{.7\textwidth}
+  		\begin{tocblock}{}
+  		\vspace*{1em}\tableofcontents[onlyparts]
+  		\end{tocblock}		
+  	\end{column}
+  \end{columns}
+\end{frame} 
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\part[Intro]{Introduction} 
+
+\section{Section 1}
+\subsection{Subsection 1.1}
+%%%%%
+\begin{frame}\frametitle{Intro - Frame 1} 
+\begin{block}{Basic Block Title}
+\begin{itemize}
+ \item This is the basic block
+\item use \textbackslash begin\{block\}...\textbackslash end\{block\}
+\end{itemize}
+\end{block}
+\pause
+\begin{columns}
+\begin{column}{5cm}
+\begin{exampleblock}{Example Block 1}
+\begin{itemize}
+ \item This is an example block
+\item use \textbackslash begin\{exampleblock\}\\ ...\textbackslash end\{exampleblock\}
+\end{itemize}
+\end{exampleblock}
+\pause
+\end{column}
+\begin{column}{5cm}
+\begin{exampleblock}{Example Block 2}
+.\\
+.\\
+.\\
+.\\
+\end{exampleblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+\subsection{Test}
+\begin{frame}\frametitle{Test frame one}
+\begin{alertblock}{Alerted Title}
+\begin{itemize}
+ \item This is an alert block
+ \item Use it for questions
+\item use \textbackslash begin\{exampleblock\}\\ ...\textbackslash end\{exampleblock\}
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\section{Section 2}
+\subsection{Subsection 2.1}
+\begin{frame}\frametitle{Test frame - Subsection I.2.1}test\end{frame}
+\subsection{Subsection 2.2}
+\begin{frame}\frametitle{Test frame - Subsection I.2.2}test\end{frame}
+
+\section{Section 3}
+\subsection{Subsection 3.1}
+\begin{frame}\frametitle{Test frame - Subsection I.3.1}test\end{frame}
+\subsection{Subsection 3.2}
+\begin{frame}\frametitle{Test frame - Subsection I.3.2}test\end{frame}
+\subsection{Subsection 3.3}
+\begin{frame}\frametitle{Test frame - Subsection I.3.3}test\end{frame}
+
+\part{Part two}
+
+\section[Section 1]{Test Section One with a really long title}
+\begin{frame}\frametitle{Test frame two}test\end{frame}
+\section{Test Section Two}
+\begin{frame}\frametitle{Test frame two}test\end{frame}
+\section{Test Section Three}
+\begin{frame}\frametitle{Test frame three}test\end{frame}
+\section{Test Section Four}
+\begin{frame}\frametitle{Test frame four}test\end{frame}
+
+\bibliographystyle{plain}
+\begin{frame}[allowframebreaks]\frametitle{References}
+\bibliography{../proposal_references}
+\end{frame}
+
+\end{document}
