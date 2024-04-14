@@ -10,3 +10,6 @@
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+
+# Ignore compiled pdf
+*.pdf
