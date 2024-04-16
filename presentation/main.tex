@@ -166,9 +166,147 @@ To derive a simplified model of the transport equation that's suitable for pract
 This factorization is \emph{always} possible (not excluding any variables) and is not (yet) unique.
 \end{frame}
 
+\begin{frame}\frametitle{The Shape Equations}
+    Substituting the factorization into the transport equation
+    \begin{equation}
+        \begin{split}
+            &A(t)\frac{1}{v}\D{}{\Psi}{t} + \Psi \frac{1}{v}\frac{dA}{dt} \\
+            &= A(t)\hat{T}(t)\Psi + A(t)\hat{F}_p(t) \int_{4\pi}\Psi d\bs{\Omega} + \sum_{i=1}^6 \varepsilon_i(\bs{r}, E, t) - A(t)\hat{L}(t)\Psi\nonumber\\
+            \D{}{\varepsilon_i}{t} &= -\lambda_i \varepsilon_i + A(t)\hat{F}_{d,i}\int_{4\pi}\Psi d\bs{\Omega}\tab i=1,\cdots, 6
+        \end{split}
+    \end{equation}
+    Called the shape equations, however, $A(t)$ is an unknown so as it stands these are not well-posed.
+\end{frame}
+
+\begin{frame}\frametitle{The Adjoint Equation}
+    \begin{block}{The Reference Reactor}
+        First define a reference reactor in steady state. The steady state problem is
+        \begin{equation}
+            \hat{L}_0(t)\psi_0=\hat{T}_0(t)\psi_0 +\frac{1}{k}\hat{F}_{tot,0}\int_{4\pi}\psi_0 d\bs{\Omega}\nonumber
+        \end{equation}
+        $k$ is a constant necessary for ensuring a solution exists. Physically it represents the neutron multiplication factor.
+        For a critical reactor, $k=1$. Introduce the ``transport operator'' $\hat{H}_0$
+        \begin{equation}
+            (-\hat{L}_0 - \hat{T}_0 + \hat{F}_{tot,0})\psi_0 \equiv \hat{H}_0 \psi_0 =0\nonumber
+        \end{equation}
+    \end{block}
+    \begin{block}{The Adjoint Equation}
+        Define the inner product as the integral over the entire phase space (excluding $t$), then can define adjoint equation
+        \begin{equation}
+            \hat{H}_0^\dagger\psi_0^\dagger =0\nonumber
+        \end{equation}
+    \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Projecting Onto the Adjoint}
+    $\psi_0^\dagger$ can be interpreted as an importance function.
+    \begin{equation}
+        \begin{split}
+            &A(t)\braket{\psi_0^\dagger}{\frac{1}{v}\D{}{\Psi}{t}} + \braket{\psi_0^\dagger}{\frac{1}{v}\Psi} \frac{dA}{dt} \\
+            &= A(t)\braket{\psi_0^\dagger}{\hat{T}(t)\Psi} + A(t)\braket{\psi_0^\dagger}{\hat{F}_p(t) \int_{4\pi}\Psi d\bs{\Omega}} + \cdots\\
+            &+ \sum_{i=1}^6 \braket{\psi_0^\dagger}{\varepsilon_i(\bs{r}, E, t)} - A(t)\braket{\psi_0^\dagger}{\hat{L}(t)\Psi}\nonumber\\
+            \braket{\psi_0^\dagger}{\D{}{\varepsilon_i}{t}} &= -\lambda_i \braket{\psi_0^\dagger}{\varepsilon_i} + A(t)\braket{\psi_0^\dagger}{\hat{F}_{d,i}\int_{4\pi}\Psi d\bs{\Omega}}\tab i=1,\cdots, 6
+        \end{split}
+    \end{equation}
+\end{frame}
+
+\begin{frame}\frametitle{Projecting Onto the Adjoint (Continued)}
+    The adjoint ($\psi_0^\dagger$) is assumed constant in time, and so inner product and time derivatives can be interchanged.
+    \begin{equation}
+        \begin{split}
+            &A(t)\D{}{}{t}\braket{\psi_0^\dagger}{\frac{1}{v}\Psi} + \braket{\psi_0^\dagger}{\frac{1}{v}\Psi} \frac{dA}{dt} \\
+            &= A(t)\braket{\psi_0^\dagger}{\hat{T}(t)\Psi} + A(t)\braket{\psi_0^\dagger}{\hat{F}_p(t) \int_{4\pi}\Psi d\bs{\Omega}} + \cdots\\
+            &+ \sum_{i=1}^6 \braket{\psi_0^\dagger}{\varepsilon_i(\bs{r}, E, t)} - A(t)\braket{\psi_0^\dagger}{\hat{L}(t)\Psi}\nonumber\\
+            \D{}{}{t}\braket{\psi_0^\dagger}{\varepsilon_i} &= -\lambda_i \braket{\psi_0^\dagger}{\varepsilon_i} + A(t)\braket{\psi_0^\dagger}{\hat{F}_{d,i}\int_{4\pi}\Psi d\bs{\Omega}}\tab i=1,\cdots, 6
+        \end{split}
+    \end{equation}
+\end{frame}
+
+\begin{frame}\frametitle{Making the Factorization Unique}
+    Since the factorization is not yet uniquely defined, we may make it uniquely defined by
+    choosing the convenient condition
+    \begin{equation}
+        \D{}{}{t}\braket{\psi_0^\dagger}{\frac{1}{v}\Psi}=0\nonumber
+    \end{equation}
+    which allows us to eliminate the first term in the projected equations. If we divide each term by the quantity
+    $\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}$ (the importance of the fission neutrons distributed according to the shape $\Psi$).
+    \begin{equation}
+        \begin{split}
+            \frac{\braket{\psi_0^\dagger}{\frac{1}{v}\Psi}}{\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}} \frac{dA}{dt} &= A(t)\frac{\braket{\psi_0^\dagger}{(\hat{T}(t)-\hat{L}(t) + \hat{F}_p(t))\Psi}}{\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}} +\sum_{i=1}^6\frac{ \braket{\psi_0^\dagger}{\varepsilon_i(\bs{r}, E, t)}}{\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}} \nonumber\\
+            \D{}{}{t}\frac{\braket{\psi_0^\dagger}{\varepsilon_i}}{\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}} &= -\lambda_i \frac{\braket{\psi_0^\dagger}{\varepsilon_i}}{\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}} + A(t)\frac{\braket{\psi_0^\dagger}{\hat{F}_{d,i}\int_{4\pi}\Psi d\bs{\Omega}}}{\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}}\tab i=1,\cdots, 6
+        \end{split}
+    \end{equation}
+\end{frame}
+
+\begin{frame}\frametitle{The Physical Interpretations}
+    \begin{itemize}
+        \item \begin{flushleft}
+            The effective generation time of prompt neutrons
+            \begin{equation}
+                \Lambda(t)=\frac{\braket{\psi_0^\dagger}{\frac{1}{v}\Psi}}{\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}}\nonumber
+            \end{equation}
+        \end{flushleft}
+        \item \begin{flushleft}
+            The Reactivity (related to the multiplication factor)
+            \begin{equation}
+                \rho(t)=\frac{\braket{\psi_0^\dagger}{\hat{H}(t)\Psi}}{\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}}\nonumber
+            \end{equation}
+        \end{flushleft}
+        \item \begin{flushleft}
+            The effective delayed neutron fraction for the $i$th group
+            \begin{equation}
+                \tilde{\beta}_i(t)=\frac{\braket{\psi_0^\dagger}{\hat{F}_{d,i}\Psi}}{\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}}\nonumber
+            \end{equation}
+        \end{flushleft}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{The Physical Interpretations (Continued)}
+    \begin{itemize}
+        \item \begin{flushleft}
+            The total effective delayed neutron fraction
+            \begin{equation}
+                \tilde{\beta}(t) = \sum_{i=1}^6 \tilde{\beta}_i(t)\nonumber
+            \end{equation}
+        \end{flushleft}
+        \item \begin{flushleft}
+            The total effective delayed neutron emission for the $i$th group
+            \begin{equation}
+                \tilde{C}_i(t)=\frac{\braket{\psi_0^\dagger}{\varepsilon_i(t)}}{\braket{\psi_0^\dagger}{\hat{F}_{tot,0}\Psi}}\nonumber
+            \end{equation}
+        \end{flushleft}
+    \end{itemize}
+    Using these parameters, we can rewrite the projected equations
+    \begin{equation}
+        \begin{split}
+            \frac{dA(t)}{dt} &= \frac{\rho(t)- \tilde{\beta}(t)}{\Lambda(t)}A(t) + \sum_{i=1}^6\lambda_i \tilde{C}_i(t)\nonumber\\
+            \D{}{}{t}\tilde{C}_i(t) &= -\lambda_i \tilde{C}_i(t) + \frac{\tilde{\beta}_i(t)}{\Lambda(t)}A(t)\tab i=1,\cdots, 6
+        \end{split}
+    \end{equation}
+\end{frame}
 
 \begin{frame}\frametitle{The Point Kinetic Model}
-
+    \begin{itemize}
+        \item The above system of equation has a nonlinear coupling through the shape function
+        \item Very hard to solve
+        \item A simplified model can be obtained by neglecting spatial dependence
+    \end{itemize}
+    Assuming that
+    \begin{equation}
+        \begin{split}
+            \Psi(\bs{r}, \bs{\Omega}, E;t) \approx \Psi(\bs{r}, \bs{\Omega}, E;t=0) &= \psi_0(\bs{r}, \bs{\Omega}, E)\nonumber\\
+            A(t=0)&=1
+        \end{split}
+    \end{equation}
+    The coefficients in the shape equation become constants. Usually rescale the equations so that $A(t)\to P(t)$ i.e. the total power.
+    \begin{block}{The Point Kinetic Equations}
+        \begin{equation}
+            \begin{split}
+                \frac{dP(t)}{dt} &= \frac{\rho- \tilde{\beta}}{\Lambda}P(t) + \sum_{i=1}^6\lambda_i \tilde{C}_i(t)\nonumber\\
+                \D{}{}{t}\tilde{C}_i(t) &= -\lambda_i \tilde{C}_i(t) + \frac{\tilde{\beta}_i}{\Lambda}P(t)\tab i=1,\cdots, 6
+            \end{split}
+        \end{equation}
+    \end{block}
 \end{frame}
 
 \begin{frame}\frametitle{Feedback}
