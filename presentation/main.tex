@@ -22,7 +22,6 @@
 
 \date{\today}
 
-
 \begin{document}
 
 { % for the title frame, use the following options
@@ -310,19 +309,213 @@ This factorization is \emph{always} possible (not excluding any variables) and i
 \end{frame}
 
 \begin{frame}\frametitle{Feedback}
-
+\begin{itemize}
+    \item The parameters $\Lambda$, $\lambda_i$, $\tilde{\beta}$, $\tilde{\beta}_i$ determined from nuclear data
+    \item Cannot be solved without $\rho$.
+        \begin{itemize}
+            \item Typically treated as a function of time $\rho(t)= \rho_{ex}(t) + \rho_{f}(t)$
+            \item Feedback from fuel/moderator temperature on reactivity via doppler broadening, etc.
+        \end{itemize}
+    \item Practically, $\rho_{ex}(t)$ given, and $\rho_{ex}(t)$ calculated from a feeback model.
+\end{itemize}
+    \begin{block}{A Lumped Feedback Model}
+        Temperature influenced by $P(t)$ via
+        \begin{equation}
+            \frac{d}{dt}\begin{pmatrix}
+                T_f\\
+                T_m
+            \end{pmatrix}  + \begin{pmatrix}
+                -b & b\\
+                c & -c -d
+            \end{pmatrix}\begin{pmatrix}
+                T_f\\
+                T_m
+            \end{pmatrix} = \begin{pmatrix}
+                a P(t)\\
+                d T_{in}
+            \end{pmatrix}\nonumber
+        \end{equation}
+        Reactivity influenced by temperature via
+        \begin{equation}
+            \rho_f(t) = \alpha_T^f (T_f - T_{f,0}) + \alpha_T^m (T_m - T_{m,0})\nonumber
+        \end{equation}
+        \emph{Nonlinear} feedback
+    \end{block}
 \end{frame}
 
-\begin{frame}\frametitle{Description of the State Space}
-
+\begin{frame}{An Example}
+    Response of a reactor to a step reactivity insertion (e.g. by ejection of a control rod)
+    % \begin{figure}
+    %     \begin{subfigure}[t]{0.47\linewidth}
+    %         \centering
+    %         \includegraphics[width=\linewidth]{images/powerCase1.jpg}
+    %     \end{subfigure}
+    %     \begin{subfigure}[t]{0.47\linewidth}
+    %         \centering
+    %         \includegraphics[width=\linewidth]{images/reactivityCase1.jpg}
+    %     \end{subfigure}
+    %     \begin{subfigure}[b]{0.47\linewidth}
+    %         \centering
+    %         \includegraphics[width=\linewidth]{images/feedbackCase1.jpg}
+    %     \end{subfigure}
+    %     \begin{subfigure}[b]{0.47\linewidth}
+    %         \centering
+    %         \includegraphics[width=\linewidth]{images/tempsCase1.jpg}
+    %     \end{subfigure}
+    % \end{figure}
+    \begin{columns}
+        \begin{column}{5cm}
+            \includegraphics[width=0.9\linewidth]{images/powerCase1.jpg}
+            \includegraphics[width=0.9\linewidth]{images/feedbackCase1.jpg}
+        \end{column}
+        \begin{column}{5cm}
+            \includegraphics[width=0.9\linewidth]{images/reactivityCase1.jpg}
+            \includegraphics[width=0.9\linewidth]{images/tempsCase1.jpg}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}\frametitle{Example Optimal Control Problems}
+\begin{frame}\frametitle{Formulating Control Problems}
+    \begin{itemize}
+        \item Our control parameter is the external reactivity $\rho_{ex}(t)$ (from the control rods)
+        \item Want to acheive some change of state
+        \item E.g. a power uprate $P_0\to P_1$
+    \end{itemize}
+    A example problem might be performing a power uprate in \emph{minimal} time. The optimal control problem is finding
+    the trajectory $\rho_{ex}(t)$ that \emph{minimizes} the uprate time $T$.
+    \begin{itemize}
+        \item Not simply a matter of inserting the largest possible reactivity then instantly withdrawing it to acheive the desired power
+            \begin{itemize}
+                \item This delayed neutrons will lead to further reactivity changes that must be accounted for before the final state can
+                be reached
+            \end{itemize}
+        \item Operational limits on reactivity insertion, and power overshoot
+            \begin{itemize}
+                \item Positive reactivity insertion less than $\beta$ (sub-prompt criticality)
+                \item Power overshoot must be less than $\alpha P_1$, where $\alpha= 1.5$ (for example).
+            \end{itemize}
+    \end{itemize}
+\end{frame}
 
+\begin{frame}\frametitle{The State Space}
+    The set of state variables can be written in vector form
+    \begin{equation}
+        \begin{split}
+            \bs{X}\equiv \begin{pmatrix}
+                P\\
+                C_1\\
+                \vdots\\
+                C_6\\
+                T_f\\
+                T_m
+            \end{pmatrix}\nonumber
+        \end{split}
+    \end{equation}
+    where $\bs{X}$ satisfies the following veector differential equation
+    \begin{equation}
+        \begin{split}
+            \frac{d}{dt}\bs{X}&= \begin{pmatrix}
+                \frac{\rho(t) - \beta}{\Lambda} & \lambda_1 & \cdots & \lambda_6 & 0 & 0\\
+                \frac{\beta_1}{\Lambda} & -\lambda_1 & \cdots & 0 & 0 & 0\\
+                \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+                \frac{\beta_6}{\Lambda} & 0 & \cdots & -\lambda_g & 0 & 0\\
+                a & 0 & \cdots & 0 & - b & b\\
+                 0 & 0 & \cdots & 0 & c & -c -d
+            \end{pmatrix}\bs{X} + \begin{pmatrix}
+                0\\
+                \vdots\\
+                d T_{in}
+            \end{pmatrix}\nonumber
+        \end{split}
+    \end{equation}
+\end{frame}
+
+\begin{frame}\frametitle{The State Space (Continued)}
+    \begin{block}{Caveats}
+        \begin{itemize}
+            \item \emph{Nonelinear} first order problem, because of the product $\rho(t)P(t)$ (since $\rho(t)$ depends on $T_f$, $T_m$).
+            \item Not really fair to write as a matrix equation.
+            \item If we were to write as $\bs{X}'= \bs{f}(t, \bs{X}(t), \rho_{ext}(t))$, we see that $\bs{f}$ depends on the control $\rho_{ext}(t)$.
+                \begin{itemize}
+                    \item This makes solving the costate equation \emph{very} difficult
+                \end{itemize}
+        \end{itemize}
+    \end{block}
+    \begin{block}{Operational Limits on the State Space}
+        \begin{enumerate}
+            \item $0 \leq P(t)\leq \alpha P_1$
+            \item $T_f,T_m>0$
+            \item $C_i >0$
+            \item Might want to impose some temperature constraints, but similar to power constraint
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Formulating the Optimal Control Problem}
+    Assuming the conditions on $\bs{f}$ hold, we may apply the Pontryagin minimum principle to express the optimal control $\overline{\rho}_{ex}$ that
+    minimizes the uprate time $T$ as that for which
+    \begin{equation}
+        \begin{split}
+            \bs{\lambda}'(t) &= \pa{\partial_{\bs{X}}\bs{f}}^*\bs{\lambda}(t)\nonumber\\
+            \overline{\rho}_{ext}(t) &= \text{argmin}_{\rho_{ext}\in U}\ex{\bs{\lambda}(t), \bs{f}(t, \overline{\bs{X}}, \rho_{{ext}(t)})}\nonumber
+        \end{split}
+    \end{equation}
+    \begin{columns}
+        \begin{column}{5cm}
+            Where $U$ is the set of all piecewise continuous functions with maximum less than $\beta$. Let $d(t) = P(t)-P_1$, then
+            \begin{equation}
+                \bs{\nabla}d = \begin{pmatrix}
+                    \D{}{d}{P}\\
+                    \D{}{d}{C_1}\\
+                    \vdots\\
+                    \D{}{d}{T_m}
+                \end{pmatrix}=\begin{pmatrix}
+                    1\\
+                    0\\
+                    \vdots\\
+                    0
+                \end{pmatrix}\nonumber
+            \end{equation}
+        \end{column}
+        \begin{column}{5cm}
+            so $C=\{\bs{x}\in \mathbb{R}^9| x_1 < P_1\}$, we see that $d=0$ on $\partial C$ and $\bs{\nabla}d\neq 0$ on $\partial C$, so
+            we have the following terminal condition on the costate
+            \begin{equation}
+                \bs{\lambda}(T) = \begin{pmatrix}
+                    1\\
+                    0\\
+                    \vdots\\
+                    0
+                \end{pmatrix}\nonumber
+            \end{equation}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}\frametitle{Numerical Alternatives}
+    \begin{itemize}
+        \item Due to the nonlinear term in $\bs{f}$, and the dependence on $\rho_{ext}$, the costate equation cannot be solved
+        separately, then used to compute the optimal control by minimizing.
+        \item An alternative is to use a numerical constrained optimization algorithm to minimize the uprate time $T$ by varying
+            a number of points in a discretized representation of $\rho_{ext}(t)$
+        \item Didn't have time to fully work out the details of this
+        \item An example (non-optimal) trajectory
+    \end{itemize}
+    \begin{columns}
+        \begin{column}{5cm}
+            \centering
+            \includegraphics[width=0.9\linewidth]{images/power.png}
+        \end{column}
+        \begin{column}{5cm}
+            \centering
+            \includegraphics[width=0.9\linewidth]{images/ramp.png}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}\frametitle{References}
-
+    \nocite{*}
+    \bibliography{bibliography.bib}
 \end{frame}
 
 \end{document}
