@@ -12,8 +12,7 @@
 
 
 
-\title[Short title] % (optional, use only with long paper titles, appears in the lower right part of each frame)
-{Optimal Control for Nuclear Reactors}
+\title{Optimal Control for Nuclear Reactors}
 
 % - Give the names in the same order as the appear in the paper.
 % - Use the \inst{?} command only if the authors have different
@@ -42,94 +41,150 @@
 }
 \addtocounter{framenumber}{-1}
 
-{
-\setbeamertemplate{headline}{}
-\begin{frame}\frametitle{Outline}
-  \begin{columns}
-  	\begin{column}{.7\textwidth}
-  		\begin{tocblock}{}
-  		\vspace*{1em}\tableofcontents[onlyparts]
-  		\end{tocblock}		
-  	\end{column}
-  \end{columns}
-\end{frame} 
-}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\part[Intro]{Introduction} 
+% \part[Intro]{Introduction} 
 
-\section{Section 1}
-\subsection{Subsection 1.1}
 %%%%%
-\begin{frame}\frametitle{Intro - Frame 1} 
-\begin{block}{Basic Block Title}
-\begin{itemize}
- \item This is the basic block
-\item use \textbackslash begin\{block\}...\textbackslash end\{block\}
-\end{itemize}
+\begin{frame}\frametitle{Basics of Nuclear Power}
+    \begin{enumerate}
+        \item Just boils water to generate steam
+        \item Energy released via fission chain reactions in fissile Uranium 235 (in fuel rods)
+        \item Self-sustaining chain reaction that's stable due to negative feedback
+    \end{enumerate}
+    \begin{figure}
+        \includegraphics[width=0.4\textwidth]{images/core-cutaway.jpg}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}\frametitle{Motivation}
+We would like to understand how to best control the chain reaction to acheive a desired end state, e.g.
+\begin{enumerate}
+    \item Power uprate
+    \item Reactor startup
+    \item Minimize power peaking in the core
+\end{enumerate}
+Nominally operate at \emph{steady state}, but these state changes are necessarily \emph{dynamic}. 
+Safety and performance relevant. Optimal control used historically to investigate these problems.
+
+\begin{block}{Control Mechanisms}
+In light water reactors (LWRs), there are two main control mechanisms
+\begin{enumerate}
+    \item Control rods: controlling \emph{rapid} changes in the chain reaction
+    \begin{enumerate}
+        \item Relevant for reactor dynamics
+    \end{enumerate}
+    \item Chemical shim: controlling \emph{slow} changes in in the chain reaction
+\end{enumerate}
 \end{block}
-\pause
+
 \begin{columns}
-\begin{column}{5cm}
-\begin{exampleblock}{Example Block 1}
-\begin{itemize}
- \item This is an example block
-\item use \textbackslash begin\{exampleblock\}\\ ...\textbackslash end\{exampleblock\}
-\end{itemize}
-\end{exampleblock}
-\pause
-\end{column}
-\begin{column}{5cm}
-\begin{exampleblock}{Example Block 2}
-.\\
-.\\
-.\\
-.\\
-\end{exampleblock}
-\end{column}
+
 \end{columns}
 \end{frame}
 
-\subsection{Test}
-\begin{frame}\frametitle{Test frame one}
-\begin{alertblock}{Alerted Title}
-\begin{itemize}
- \item This is an alert block
- \item Use it for questions
-\item use \textbackslash begin\{exampleblock\}\\ ...\textbackslash end\{exampleblock\}
-\end{itemize}
-\end{alertblock}
+\begin{frame}\frametitle{Relevant Quantities in Reactor Physics}
+Interested only in neutrons and their interations (fission, absorption, etc).
+\begin{block}{Quantities}
+    \begin{itemize}
+        \item $\phi$ (the scalar flux): number of neutrons impinging on a cross sectional area per second.
+        \item $\Sigma$ (the macroscopic cross section): characterizes the probabilitiy for a given interaction (measured in units of 1/L)
+    \end{itemize}
+\end{block}
+\begin{block}{The Reaction Rate}
+    With the scalar flux and the cross section, we can calculate reaction rates (e.g. of fission)
+    \begin{equation}
+        R_x = \Sigma_x \phi\nonumber
+    \end{equation}
+    units of \si{1/cm^3} (a reaction rate density), and subsequently the \emph{power}
+    \begin{equation}
+        P =``\int_V \Sigma_x \phi dV "\nonumber
+    \end{equation}
+\end{block}
 \end{frame}
 
-\section{Section 2}
-\subsection{Subsection 2.1}
-\begin{frame}\frametitle{Test frame - Subsection I.2.1}test\end{frame}
-\subsection{Subsection 2.2}
-\begin{frame}\frametitle{Test frame - Subsection I.2.2}test\end{frame}
+\begin{frame}\frametitle{Fission Chain Reactions and Controllability}
+    \begin{block}{Controlling the Chain Reaction}
+        The fission process is incredibly fast, and in a nuclear reactor, the time between a neutron's birth via fission and its next fission reaction is
+        on the order of \si{\mu s}.
+        \begin{enumerate}
+            \item This would make controlling a reactor nearly impossible
+            \item The response to small changes in the neutron multiplication factor result in \emph{extremely} rapid changes to power
+        \end{enumerate}
+    \end{block}
+    \begin{block}{Prompt and Delayed Neutrons}
+        During a fission event, some neutrons are released (nearly) immediately from the fissioning nucleus: \tb{prompt neutrons}, and some are emitted by subsequent decaay of
+        fission products \tb{delayed neutrons}.
+        \begin{flushleft}
+        $\beta$: The fraction of fission neutrons that are delayed ($\approx 0.7\%$)
+        \end{flushleft}
+    \end{block}
+\end{frame}
 
-\section{Section 3}
-\subsection{Subsection 3.1}
-\begin{frame}\frametitle{Test frame - Subsection I.3.1}test\end{frame}
-\subsection{Subsection 3.2}
-\begin{frame}\frametitle{Test frame - Subsection I.3.2}test\end{frame}
-\subsection{Subsection 3.3}
-\begin{frame}\frametitle{Test frame - Subsection I.3.3}test\end{frame}
+\begin{frame}\frametitle{Governing Equations}
+Simplification of the general Boltzman equation from statistical mechanics
+\begin{block}{The Linear Boltzman (Neutron Transport) Equation}
+    State space $\bs{r}$, $\bs{\Omega}$, $E$, $t$ (or $\bs{r}$, $\bs{v}$, $t$) $\implies \psi(\bs{r}, \bs{\Omega}, E, t)$, the angular flux
+    \begin{equation}
+        \begin{split}
+            \frac{1}{v}\D{}{\psi}{t} &= \hat{T}(t)\psi + \hat{F}_p(t) \int_{4\pi}\psi d\bs{\Omega} + \sum_{i=1}^6 \varepsilon_i(\bs{r}, E, t) - \hat{L}(t)\psi\\
+            \D{}{\varepsilon_i}{t} &= -\lambda_i \varepsilon_i + \hat{F}_{d,i}\int_{4\pi}\psi d\bs{\Omega}\tab i=1,\cdots, 6
+        \end{split}
+    \end{equation}
+\end{block}
+\begin{block}{The Operators}
+    All linear operators
+    \begin{columns}
+        \begin{column}{5cm}
+            \begin{enumerate}
+                \item $\hat{T}$: Scattering
+                \item $\hat{F}_p$: Prompt fission
+                \item $\hat{F}_d$: Delayed fission
+            \end{enumerate}
+        \end{column}
+        \begin{column}{5cm}
+            \begin{enumerate}
+                \setcounter{enumi}{3}
+                \item $\hat{L}$: Leakage
+            \end{enumerate}
+            Note that $\hat{F}_p + \hat{F}_d = \hat{F}_{tot}$
+        \end{column}
+    \end{columns}
+\end{block}
+\end{frame}
 
-\part{Part two}
+\begin{frame}\frametitle{The Factorization}
+To derive a simplified model of the transport equation that's suitable for practical calculations, we need to \emph{factorize}.
+\begin{block}{Motivation}
+    The main idea is to separate the variation of the flux into a fast and slow component (due to delayed neutrons). Factorization of the form
+    \begin{equation}
+        \psi(\bs{r}, \bs{\Omega}, E, t)=A(t)\Psi(\bs{r}, \bs{\Omega}, E; t)\nonumber
+    \end{equation}
+    $A(t)$ called the \emph{amplitude} function and $\Psi(\bs{r}, \bs{\Omega}, E; t)$ the shape function.
+\end{block}
+This factorization is \emph{always} possible (not excluding any variables) and is not (yet) unique.
+\end{frame}
 
-\section[Section 1]{Test Section One with a really long title}
-\begin{frame}\frametitle{Test frame two}test\end{frame}
-\section{Test Section Two}
-\begin{frame}\frametitle{Test frame two}test\end{frame}
-\section{Test Section Three}
-\begin{frame}\frametitle{Test frame three}test\end{frame}
-\section{Test Section Four}
-\begin{frame}\frametitle{Test frame four}test\end{frame}
 
-\bibliographystyle{plain}
-\begin{frame}[allowframebreaks]\frametitle{References}
-\bibliography{../proposal_references}
+\begin{frame}\frametitle{The Point Kinetic Model}
+
+\end{frame}
+
+\begin{frame}\frametitle{Feedback}
+
+\end{frame}
+
+\begin{frame}\frametitle{Description of the State Space}
+
+\end{frame}
+
+\begin{frame}\frametitle{Example Optimal Control Problems}
+
+\end{frame}
+
+\begin{frame}\frametitle{References}
+
 \end{frame}
 
 \end{document}
